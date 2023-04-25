@@ -1,4 +1,4 @@
-package com.umg.ws.bc;
+package gt.umg.beneficiocafe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

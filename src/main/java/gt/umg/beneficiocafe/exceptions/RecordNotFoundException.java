@@ -1,4 +1,4 @@
-package com.umg.ws.bc.exceptions;
+package gt.umg.beneficiocafe.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
