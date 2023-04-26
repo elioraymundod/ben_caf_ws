@@ -10,37 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
-    @GetMapping("/all")
+    @GetMapping("/web-service")
     public String allAccess() {
-        return "Public Content.";
+        return "El Web Service esta funcionando correctamente";
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('UMG_BC_PESO_CABAL')")
     public String adminAccess() {
         return "Admin Content.";
-    }
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('USER')")
-    public String userAccess() {
-        return "User Content.";
-    }
-
-    @GetMapping("/beneficio")
-    @PreAuthorize("hasRole('BENEFICIO')")
-    public String beneficioAccess() {
-        return "Beneficio Content.";
-    }
-
-    @GetMapping("/agricultor")
-    @PreAuthorize("hasRole('AGRICULTOR')")
-    public String agricultorAccess() {
-        return "Agricultor Content.";
-    }
-
-    @GetMapping("/peso-cabal")
-    @PreAuthorize("hasRole('PESO_CABAL')")
-    public String pesoCabalAccess() {
-        return "Peso Cabal Content.";
     }
 }

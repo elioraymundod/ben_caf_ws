@@ -1,7 +1,7 @@
 package gt.umg.beneficiocafe.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import gt.umg.beneficiocafe.models.User;
+import gt.umg.beneficiocafe.models.BCUsuarios;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,14 +28,14 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(BCUsuarios user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .map(role -> new SimpleGrantedAuthority(role.getNombreRol().name()))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
                 user.getUsername(),
-                user.getPassword(),
+                user.getPasswordUsuario(),
                 authorities);
     }
 

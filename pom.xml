@@ -8,13 +8,13 @@
         <version>2.7.10</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.umg.ws</groupId>
+    <groupId>gt.umg.beneficiocafe</groupId>
     <artifactId>bc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>beneficio-cafe-ws</name>
-    <description>Web Service para Beneficio de Café</description>
+    <name>ben-caf-ws</name>
+    <description>Web Service Beneficio de Café</description>
     <properties>
-        <start-class>com.umg.ws.bc.BeneficioCafeWsApplication</start-class>
+        <start-class>gt.umg.beneficiocafe.BeneficioCafeApplication</start-class>
         <java.version>11</java.version>
     </properties>
     <dependencies>
@@ -73,7 +73,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.umg.ws.bc.BeneficioCafeWsApplication</mainClass>
+                    <mainClass>gt.umg.beneficiocafe.BeneficioCafeWsApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.project-lombok</groupId>

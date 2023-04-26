@@ -4,9 +4,12 @@
  */
 package gt.umg.beneficiocafe.models;
 
+import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -25,29 +28,15 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "solicitud_transporte", schema = "db_agricultor_ws")
-public class AgricultorSolicitudTransporte {
+@Table(name = "bc_roles", schema = "umg_beneficio_cafe")
+public class BCRoles implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "correlativo")
-    private UUID correlativo;
+    @Column(name = "id_rol")
+    private UUID idRol;
     
-    @Column(name = "id_solicitud")
-    private UUID idSolicitud;
-    
-    @Column(name = "id_transporte")
-    private UUID idTransporte;
-    
-    @Column(name = "licencia")
-    private String licencia;
-
-    public AgricultorSolicitudTransporte(UUID idSolicitud, UUID idTransporte, String licencia) {
-        this.idSolicitud = idSolicitud;
-        this.idTransporte = idTransporte;
-        this.licencia = licencia;
-    }
-    
-    
-    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nombre_rol")
+    private Roles nombreRol;
 }

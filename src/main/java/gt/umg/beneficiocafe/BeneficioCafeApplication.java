@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BeneficioCafeWsApplication {
+public class BeneficioCafeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BeneficioCafeWsApplication.class, args);
+		SpringApplication.run(BeneficioCafeApplication.class, args);
 	}
 
 }
