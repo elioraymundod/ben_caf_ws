@@ -52,25 +52,24 @@ public class BCPilotos implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCPilotos(String licenciaPiloto, String nombre, String celular, String correo, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
+    public BCPilotos(String licenciaPiloto, String nombre, String celular, String correo, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
         this.licenciaPiloto = licenciaPiloto;
         this.nombre = nombre;
         this.celular = celular;
         this.correo = correo;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
+        this.permitidoEnBeneficio = permitidoEnBeneficio;
     }
     
 }

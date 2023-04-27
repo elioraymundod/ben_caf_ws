@@ -54,26 +54,23 @@ public class BCCuentas implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCCuentas(UUID idCuenta, String noCuenta, UUID estado, UUID solicitud, String descripcion, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idCuenta = idCuenta;
+    public BCCuentas(String noCuenta, UUID estado, UUID solicitud, String descripcion, UUID usuarioCreacion, Date fechaCreacion) {
         this.noCuenta = noCuenta;
         this.estado = estado;
         this.solicitud = solicitud;
         this.descripcion = descripcion;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
     }
     
     

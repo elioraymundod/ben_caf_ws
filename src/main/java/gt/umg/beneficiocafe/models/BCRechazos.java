@@ -6,6 +6,7 @@
 package gt.umg.beneficiocafe.models;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -48,23 +49,20 @@ public class BCRechazos implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCRechazos(UUID idRechazo, UUID solicitud, String observaciones, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idRechazo = idRechazo;
+    public BCRechazos(UUID solicitud, String observaciones, UUID usuarioCreacion) {
         this.solicitud = solicitud;
         this.observaciones = observaciones;
         this.usuarioCreacion = usuarioCreacion;
-        this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
+        //this.fechaCreacion = fechaCreacion;
     }    
 }

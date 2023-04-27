@@ -48,24 +48,22 @@ public class BCPesajesBascula implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCPesajesBascula(UUID idPesaje, UUID parcialidad, Double peso, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idPesaje = idPesaje;
+    public BCPesajesBascula(UUID parcialidad, Double peso, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idPesaje = idPesaje;
         this.parcialidad = parcialidad;
         this.peso = peso;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
     }
     
     

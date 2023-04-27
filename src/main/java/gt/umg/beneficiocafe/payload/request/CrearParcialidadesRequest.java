@@ -4,7 +4,6 @@
  */
 package gt.umg.beneficiocafe.payload.request;
 
-import java.util.Date;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,24 +15,23 @@ import lombok.Setter;
  *
  * @author Elio Raymundo
  */
-
 @Getter
 @Setter
-public class CrearSolicitudRequest {
+public class CrearParcialidadesRequest {
     @NotNull
-    private UUID estadoSolicitiud;
+    private UUID solicitud;
+    
+    @NotNull
+    private Double pesoEnviado;
     
     @NotBlank
     @NotNull
-    @Size(min = 3, max = 15)
+    @Size(min = 6, max = 15)
     private String placa;
     
-    @NotNull
-    private Integer cantidadParcialidades;
-    
     @NotBlank
     @NotNull
-    @Size(min = 3, max = 15)
+    @Size(min = 10, max = 15)
     private String piloto;
     
     @NotNull

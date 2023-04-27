@@ -51,25 +51,23 @@ public class BCAnexos implements Serializable{
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCAnexos(UUID idAnexo, UUID solicitud, String observaciones, String sobranteFaltante, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idAnexo = idAnexo;
+    public BCAnexos(UUID solicitud, String observaciones, String sobranteFaltante, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idAnexo = idAnexo;
         this.solicitud = solicitud;
         this.observaciones = observaciones;
         this.sobranteFaltante = sobranteFaltante;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
     }
     
     

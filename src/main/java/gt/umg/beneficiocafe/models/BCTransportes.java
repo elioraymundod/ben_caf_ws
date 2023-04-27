@@ -49,24 +49,23 @@ public class BCTransportes implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCTransportes(String placaTransporte, String marca, String color, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
+    public BCTransportes(String placaTransporte, String marca, String color, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
         this.placaTransporte = placaTransporte;
         this.marca = marca;
         this.color = color;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
+        this.permitidoEnBeneficio = permitidoEnBeneficio;
     }
     
     

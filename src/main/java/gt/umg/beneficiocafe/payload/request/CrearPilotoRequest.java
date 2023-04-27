@@ -19,22 +19,27 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CrearSolicitudRequest {
-    @NotNull
-    private UUID estadoSolicitiud;
-    
+
+public class CrearPilotoRequest {
     @NotBlank
     @NotNull
     @Size(min = 3, max = 15)
-    private String placa;
-    
-    @NotNull
-    private Integer cantidadParcialidades;
+    private String licenciaPiloto;
     
     @NotBlank
     @NotNull
-    @Size(min = 3, max = 15)
-    private String piloto;
+    @Size(min = 3, max = 50)
+    private String nombre;
+    
+    @NotBlank
+    @NotNull
+    @Size(min = 3, max = 10)
+    private String celular;
+    
+    @NotBlank
+    @NotNull
+    @Size(min = 8, max = 50)
+    private String correo;
     
     @NotNull
     private UUID usuarioCreacion;

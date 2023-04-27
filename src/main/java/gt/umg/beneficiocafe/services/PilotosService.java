@@ -7,10 +7,12 @@ package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
 import gt.umg.beneficiocafe.models.BCPilotos;
-import gt.umg.beneficiocafe.payload.request.CrearSolicitudRequest;
+import gt.umg.beneficiocafe.payload.request.CrearPilotoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
 import gt.umg.beneficiocafe.repository.PilotosRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
+import gt.umg.beneficiocafe.util.ManejoFechas;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,11 +38,11 @@ public class PilotosService {
     /*
         Metodo para crear un piloto
     */
-    public ResponseEntity<?> registrarPiloto(CrearSolicitudRequest piloto) throws BadRequestException{
+    public ResponseEntity<?> registrarPiloto(CrearPilotoRequest piloto) throws BadRequestException{
         String respuesta;
         logger.info("El piloto a crear es " + piloto);
         try{
-            BCPilotos nuevoPiloto = new BCPilotos();
+            BCPilotos nuevoPiloto = new BCPilotos(piloto.getLicenciaPiloto(), piloto.getNombre(), piloto.getCelular(), piloto.getCorreo(), piloto.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), false);
             pilotosRepository.save(nuevoPiloto);
             return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "El piloto se creo exitosamente", nuevoPiloto));
         } catch(BadRequestException e) {

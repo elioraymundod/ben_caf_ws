@@ -48,24 +48,22 @@ public class BCImpresionesBascula implements Serializable {
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     
     @Column(name = "usuario_modificacion")
     private UUID usuarioModificacion;
     
     @Column(name = "fecha_modificacion")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCImpresionesBascula(UUID idImpresion, UUID pesaje, UUID usuarioImprimio, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idImpresion = idImpresion;
+    public BCImpresionesBascula(UUID pesaje, UUID usuarioImprimio, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idImpresion = idImpresion;
         this.pesaje = pesaje;
         this.usuarioImprimio = usuarioImprimio;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
     }
     
     
