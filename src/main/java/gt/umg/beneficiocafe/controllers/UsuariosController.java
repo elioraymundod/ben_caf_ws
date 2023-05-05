@@ -4,9 +4,15 @@
  */
 package gt.umg.beneficiocafe.controllers;
 
+import gt.umg.beneficiocafe.models.BCPilotos;
+import gt.umg.beneficiocafe.models.BCUsuarios;
 import gt.umg.beneficiocafe.payload.request.CrearUsuarioRequest;
+import gt.umg.beneficiocafe.payload.request.GetUsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.LoginRequest;
+import gt.umg.beneficiocafe.payload.request.PilotoRequest;
+import gt.umg.beneficiocafe.services.PilotosService;
 import gt.umg.beneficiocafe.services.UsuariosService;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +32,7 @@ public class UsuariosController {
 
     private UsuariosService usuariosService;
 
-    public UsuariosController(UsuariosService usuarioService) {
+    public UsuariosController(UsuariosService usuarioService, PilotosService pilotosService) {
         this.usuariosService = usuarioService;
     }
 
@@ -34,9 +40,19 @@ public class UsuariosController {
     public ResponseEntity<?> registrarUsuario(@Valid @RequestBody CrearUsuarioRequest nuevoUsuario) {
         return usuariosService.registrarUsuario(nuevoUsuario);
     }
+    
+    @PostMapping("/user")
+    public Optional<BCUsuarios> getUsuario(@Valid @RequestBody GetUsuarioRequest usuario) {
+        return usuariosService.getUsuario(usuario);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         return usuariosService.login(loginRequest);
+    }
+    
+    @PostMapping("/piloto")
+    public Optional<BCPilotos> getPiloto(@Valid @RequestBody PilotoRequest transportistaRequest) {
+        return usuariosService.getPiloto(transportistaRequest);
     }
 }

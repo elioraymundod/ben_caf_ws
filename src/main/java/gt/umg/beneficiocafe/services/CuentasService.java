@@ -42,7 +42,7 @@ public class CuentasService {
         String respuesta;
         logger.info("La cuenta a crear es " + cuenta);
         try{
-            BCCuentas nuevaCuenta = new BCCuentas(cuenta.getNoCuenta(), cuenta.getEstado(), cuenta.getSolicitud(), cuenta.getDescripcion(), cuenta.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
+            BCCuentas nuevaCuenta = new BCCuentas(cuenta.getNoCuenta(), cuenta.getEstado(), cuenta.getSolicitud(), cuenta.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
             cuentasRepository.save(nuevaCuenta);
             return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La cuenta se creo exitosamente", nuevaCuenta));
         } catch(BadRequestException e) {

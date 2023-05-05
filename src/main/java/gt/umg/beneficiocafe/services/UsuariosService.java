@@ -5,19 +5,24 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
+import gt.umg.beneficiocafe.models.BCPilotos;
 import gt.umg.beneficiocafe.models.BCRoles;
 import gt.umg.beneficiocafe.models.BCUsuarios;
 import gt.umg.beneficiocafe.models.Roles;
 import gt.umg.beneficiocafe.payload.request.CrearUsuarioRequest;
+import gt.umg.beneficiocafe.payload.request.GetUsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.LoginRequest;
+import gt.umg.beneficiocafe.payload.request.PilotoRequest;
 import gt.umg.beneficiocafe.payload.response.JwtResponse;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
+import gt.umg.beneficiocafe.repository.PilotosRepository;
 import gt.umg.beneficiocafe.repository.RolesRepository;
 import gt.umg.beneficiocafe.repository.UsuariosRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.security.services.UserDetailsImpl;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -41,16 +46,28 @@ public class UsuariosService {
     private final UsuariosRepository usuariosRepository;
     private final RolesRepository rolesRepository;
     private final PasswordEncoder passwordEndocer;
+    private final PilotosRepository pilotosRepository;
     private AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
     private static final Logger logger = LoggerFactory.getLogger(UsuariosService.class);
 
-    public UsuariosService(UsuariosRepository usuariosRepository, RolesRepository rolesRepository, PasswordEncoder passwordEndocer, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public UsuariosService(UsuariosRepository usuariosRepository,PilotosRepository pilotosRepository, RolesRepository rolesRepository, PasswordEncoder passwordEndocer, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.usuariosRepository = usuariosRepository;
         this.rolesRepository = rolesRepository;
         this.passwordEndocer = passwordEndocer;
+        this.pilotosRepository = pilotosRepository;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+    }
+    
+    /*
+        Metodo para obtener los datos de un usuario
+    */
+    public Optional<BCUsuarios> getUsuario(GetUsuarioRequest login) {
+        String respuesta;
+        logger.info("El usuario es ", login);
+        Optional<BCUsuarios> user = usuariosRepository.findByUsername(login.getLogin());
+        return user;
     }
 
     /*
@@ -144,4 +161,15 @@ public class UsuariosService {
                 jwt,
                 roles));
     }
+    
+    /*
+        Metodo para obtener informacion de un transportista
+    */
+    public Optional<BCPilotos> getPiloto(PilotoRequest transportistaRequest) {
+        String respuesta;
+        logger.info("El piloto a consultar es ", transportistaRequest);
+        Optional<BCPilotos> transportista = pilotosRepository.findByLicenciaPiloto(transportistaRequest.getLicencia());
+        return transportista;
+    }
+
 }

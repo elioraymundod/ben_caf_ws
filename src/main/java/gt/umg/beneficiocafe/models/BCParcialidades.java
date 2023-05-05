@@ -50,6 +50,9 @@ public class BCParcialidades implements Serializable {
     @Column(name = "piloto")
     private String piloto;
     
+    @Column(name = "atendido")
+    private Boolean atendido;
+    
      @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
     
@@ -64,13 +67,15 @@ public class BCParcialidades implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCParcialidades(UUID solicitud, Double pesoEnviado, String placa, String piloto, UUID usuarioCreacion, Date fechaCreacion) {
+    public BCParcialidades(UUID solicitud, Double pesoEnviado, String placa, String piloto, Boolean atendido, UUID usuarioCreacion, Date fechaCreacion) {
         this.solicitud = solicitud;
         this.pesoEnviado = pesoEnviado;
         this.placa = placa;
         this.piloto = piloto;
+        this.atendido = atendido;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
     }
-    
+
+ 
 }

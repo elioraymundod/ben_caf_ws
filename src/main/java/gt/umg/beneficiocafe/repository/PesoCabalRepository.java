@@ -22,4 +22,14 @@ public interface PesoCabalRepository extends JpaRepository<BCPesajesBascula, UUI
             nativeQuery = true
     )
     public BCPesajesBascula getPesajeById(@Param("pesaje") UUID pesaje);
+    
+    @Query(value = "select \n"
+            + " bs.* \n"
+            + " from umg_beneficio_cafe.bc_pesajes_bascula bs \n"
+            + " where bs.parcialidad =:parcialidad",
+            nativeQuery = true
+    )
+    public BCPesajesBascula getPesajeByParcialidad(@Param("parcialidad") UUID parcialidad);
+    
+    
 }

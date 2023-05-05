@@ -47,9 +47,6 @@ public class BCCuentas implements Serializable {
     @Column(name = "solicitud")
     private UUID solicitud;
     
-    @Column(name = "descripcion")
-    private String descripcion;
-    
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
     
@@ -64,11 +61,10 @@ public class BCCuentas implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCCuentas(String noCuenta, UUID estado, UUID solicitud, String descripcion, UUID usuarioCreacion, Date fechaCreacion) {
+    public BCCuentas(String noCuenta, UUID estado, UUID solicitud, UUID usuarioCreacion, Date fechaCreacion) {
         this.noCuenta = noCuenta;
         this.estado = estado;
         this.solicitud = solicitud;
-        this.descripcion = descripcion;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
     }

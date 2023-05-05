@@ -4,17 +4,28 @@
  */
 package gt.umg.beneficiocafe.services;
 
+import gt.umg.beneficiocafe.dto.FaltanteSobranteDto;
+import gt.umg.beneficiocafe.dto.SolicitudesDto;
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
+import gt.umg.beneficiocafe.models.BCParcialidades;
+import gt.umg.beneficiocafe.models.BCPesajesBascula;
 import gt.umg.beneficiocafe.models.BCSolicitudes;
 import gt.umg.beneficiocafe.payload.request.CambiarEstadoSolicitudRequest;
 import gt.umg.beneficiocafe.payload.request.CrearSolicitudRequest;
+import gt.umg.beneficiocafe.payload.request.EstadoRequest;
+import gt.umg.beneficiocafe.payload.request.UsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.ValidarSolicitudRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
 import gt.umg.beneficiocafe.projections.SolicitudValidaProjection;
+import gt.umg.beneficiocafe.projections.SolicitudesDetalleProjection;
+import gt.umg.beneficiocafe.repository.ParcialidadesRepository;
+import gt.umg.beneficiocafe.repository.PesoCabalRepository;
 import gt.umg.beneficiocafe.repository.SolicitudesRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,12 +40,20 @@ import org.springframework.stereotype.Service;
 public class SolicitudesService {
     
     private final SolicitudesRepository solicitudesRepository;
+    private final ParcialidadesRepository parcialidadesRepository;
+    private final PesoCabalRepository pesoCabalRepository;
+    private double pesosIndicados; 
+    private double pesosBascula;
     private JwtUtils jwtUtils;
     private static final Logger logger = LoggerFactory.getLogger(UsuariosService.class);
 
-    public SolicitudesService(SolicitudesRepository solicitudesRepository, JwtUtils jwtUtils) {
+    public SolicitudesService(SolicitudesRepository solicitudesRepository, ParcialidadesRepository parcialidadesRepository,JwtUtils jwtUtils, PesoCabalRepository pesoCabalRepository) {
         this.solicitudesRepository = solicitudesRepository;
+        this.parcialidadesRepository = parcialidadesRepository;
         this.jwtUtils = jwtUtils;
+        this.pesoCabalRepository = pesoCabalRepository;
+        this.pesosBascula = 0;
+        this.pesosIndicados = 0;
     }
     
     /*
@@ -45,9 +64,41 @@ public class SolicitudesService {
         logger.info("La solicitud a crear es " + solicitud);
         try{
             BCSolicitudes nuevaSolicitud = new BCSolicitudes(solicitud.getEstadoSolicitiud(), solicitud.getPlaca(), solicitud.getCantidadParcialidades(),
-                            solicitud.getPiloto(), solicitud.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
+                            solicitud.getPiloto(), solicitud.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), solicitud.getDescripcion());
             solicitudesRepository.save(nuevaSolicitud);
             return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La solicitud se creo exitosamente", nuevaSolicitud));
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener solicitudes en base a un usuario
+    */
+    public List<SolicitudesDetalleProjection> getSolicitudesByUsuario(UsuarioRequest usuario) throws BadRequestException{
+        
+        logger.info("Se consulta solicitudes del usuario " + usuario.getUsuario());
+        try{
+            List<SolicitudesDetalleProjection> respuesta = new ArrayList<>();
+            respuesta = solicitudesRepository.solicitudesByUser(usuario.getUsuario());
+            return respuesta;
+            //return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, ""));
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener solicitudes por estado
+    */
+    public List<SolicitudesDetalleProjection> getSolicitudesByEstado(EstadoRequest estado) throws BadRequestException{
+        
+        logger.info("Se consulta solicitudes en estado " + estado.getEstado());
+        try{
+            List<SolicitudesDetalleProjection> respuesta = new ArrayList<>();
+            respuesta = solicitudesRepository.solicitudesByEstado(estado.getEstado());
+            return respuesta;
+            //return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, ""));
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());
         }
@@ -91,6 +142,50 @@ public class SolicitudesService {
                 solicitudesRepository.save(solicitudBuscada);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se actualizo la solicitud correctamente", solicitudBuscada));
             }
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para validar Faltantes y Sobrantes
+    */
+    public ResponseEntity<?> validarFaltantesSobrantes(ValidarSolicitudRequest solicitud) throws BadRequestException{
+        this.pesosBascula= 0;
+        this.pesosIndicados = 0;
+       Boolean respuesta = false;
+        logger.info("La solicitud a validar es " + solicitud.getSolicitud());
+        try{
+           
+           List<BCParcialidades> parcialidadesSolicitud = parcialidadesRepository.getParcialidadesBySolicitud(solicitud.getSolicitud());
+           parcialidadesSolicitud.forEach(parcialidad -> {
+               this.pesosIndicados += parcialidad.getPesoEnviado();
+               BCPesajesBascula pesajeBascula = pesoCabalRepository.getPesajeByParcialidad(parcialidad.getIdParcialidad());
+               this.pesosBascula += pesajeBascula.getPeso();
+           });
+            double maximo = this.pesosIndicados * 1.05;
+            double minimo = this.pesosIndicados * 0.95;
+            FaltanteSobranteDto resultado = new FaltanteSobranteDto() ;
+            resultado.setMaximo(maximo);
+            resultado.setMinimo(minimo);
+            resultado.setPesoBascula(this.pesosBascula);
+            resultado.setPesoIngresado(this.pesosIndicados);
+            resultado.setFaltanteSobrante("");
+            if (this.pesosBascula >= minimo && this.pesosBascula <= maximo) {
+                resultado.setValido(true);
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Faltantes sobrantes validos", resultado));
+            } else {
+                resultado.setValido(false);
+                if (this.pesosBascula < minimo) {
+                    resultado.setFaltanteSobrante("F");
+                    return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Faltantes ", resultado));
+                }  if (this.pesosBascula > maximo) {
+                    resultado.setFaltanteSobrante("S");
+                    return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Sobrante", resultado));
+                }
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "cantidad invalida", false));
+            }
+            
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());
         }

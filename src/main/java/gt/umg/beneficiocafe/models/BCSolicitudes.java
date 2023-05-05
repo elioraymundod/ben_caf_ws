@@ -30,7 +30,7 @@ public class BCSolicitudes {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_solicitud")
+    @Column(name = "id_solicitud", columnDefinition = "UUID")
     private UUID idSolicitud;
     
     @Column(name = "estado_solicitud")
@@ -44,6 +44,9 @@ public class BCSolicitudes {
     
     @Column(name = "piloto")
     private String piloto;
+    
+    @Column(name = "descripcion")
+    private String descripcion;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -59,8 +62,9 @@ public class BCSolicitudes {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCSolicitudes(UUID estadoSolicitud, String placa, Integer cantidadParcialidades, String piloto, UUID usuarioCreacion, Date fechaCreacion) {
+    public BCSolicitudes(UUID estadoSolicitud, String placa, Integer cantidadParcialidades, String piloto, UUID usuarioCreacion, Date fechaCreacion,String descripcion) {
         this.estadoSolicitud = estadoSolicitud;
+        this.descripcion = descripcion;
         this.placa = placa;
         this.cantidadParcialidades = cantidadParcialidades;
         this.piloto = piloto;

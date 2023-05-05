@@ -6,6 +6,7 @@
 package gt.umg.beneficiocafe.repository;
 
 import gt.umg.beneficiocafe.models.BCPilotos;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,5 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Elio Raymundo
  */
 public interface PilotosRepository extends JpaRepository<BCPilotos, String> {
-    
+    Optional<BCPilotos> findByLicenciaPiloto(String licencia);
 }

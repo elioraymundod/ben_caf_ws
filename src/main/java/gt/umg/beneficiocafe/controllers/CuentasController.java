@@ -39,7 +39,7 @@ public class CuentasController {
     }
     
     @PutMapping("/update")
-    @PreAuthorize("hasRole('UMG_BC_BENEFICIO')")
+    @PreAuthorize("hasRole('ROLE_UMG_BC_BENEFICIO') || hasRole('ROLE_UMG_BC_AGRICULTOR') || hasRole('ROLE_UMG_BC_PESO_CABAL')")
     public ResponseEntity<?> actualizarEstadoCuenta(@Valid @RequestBody CambiarEstadoCuentaRequest cuenta) {
         return cuentasService.cambiarEstadoCuenta(cuenta);
     }
