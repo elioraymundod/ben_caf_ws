@@ -14,7 +14,7 @@
     <name>ben-caf-ws</name>
     <description>Web Service Beneficio de Café</description>
     <properties>
-        <start-class>gt.umg.beneficiocafe.BeneficioCafeApplication</start-class>
+        <start-class>gt.umg.beneficiocafe.bc.BeneficioCafeApplication</start-class>
         <java.version>11</java.version>
     </properties>
     <dependencies>
@@ -78,7 +78,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>gt.umg.beneficiocafe.BeneficioCafeWsApplication</mainClass>
+                    <mainClass>gt.umg.beneficiocafe.bc.BeneficioCafeWsApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.project-lombok</groupId>
