@@ -78,7 +78,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>gt.umg.beneficiocafe.bc.BeneficioCafeWsApplication</mainClass>
+                    <mainClass>gt.umg.beneficiocafe.bc.BeneficioCafeApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.project-lombok</groupId>
