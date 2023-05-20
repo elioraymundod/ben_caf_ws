@@ -69,6 +69,7 @@ public class PesoCabalDb {
         factoryBean.setJpaVendorAdapter(vendor);
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", environment.getProperty("pesocabal.jpa.database-platform"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("pesocabal.jpa.hibernate.ddl-auto"));
         //factoryBean.setJpaPropertyMap(properties);
         return factoryBean;
     }

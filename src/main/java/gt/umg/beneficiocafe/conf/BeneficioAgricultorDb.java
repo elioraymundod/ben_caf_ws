@@ -48,7 +48,8 @@ public class BeneficioAgricultorDb {
         dataSource.setUrl(environment.getProperty("spring.datasource.url")); 
         dataSource.setUsername(environment.getProperty("spring.datasource.username")); 
         dataSource.setPassword(environment.getProperty("spring.datasource.password")); 
-        dataSource.setDriverClassName(environment.getProperty("spring.jpa.database-platform"));
+        dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
+        
         //return DataSourceBuilder.create().build();
         /*return DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
@@ -70,6 +71,7 @@ public class BeneficioAgricultorDb {
         factoryBean.setJpaVendorAdapter(vendor);
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", environment.getProperty("spring.jpa.database-platform"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
         //factoryBean.setJpaPropertyMap(properties);
         return factoryBean;
     }
