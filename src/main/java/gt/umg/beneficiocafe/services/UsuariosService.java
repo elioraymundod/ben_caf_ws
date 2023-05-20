@@ -5,19 +5,21 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCPilotos;
-import gt.umg.beneficiocafe.models.BCRoles;
-import gt.umg.beneficiocafe.models.BCUsuarios;
-import gt.umg.beneficiocafe.models.Roles;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCPilotos;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCRoles;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCUsuarios;
+import gt.umg.beneficiocafe.models.beneficioagricultor.Roles;
 import gt.umg.beneficiocafe.payload.request.CrearUsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.GetUsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.LoginRequest;
 import gt.umg.beneficiocafe.payload.request.PilotoRequest;
+import gt.umg.beneficiocafe.payload.request.SolicitudRequest;
 import gt.umg.beneficiocafe.payload.response.JwtResponse;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.PilotosRepository;
-import gt.umg.beneficiocafe.repository.RolesRepository;
-import gt.umg.beneficiocafe.repository.UsuariosRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.PilotosRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.RolesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.UsuariosRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.security.services.UserDetailsImpl;
 import java.util.HashSet;
@@ -35,6 +37,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -47,32 +51,35 @@ public class UsuariosService {
     private final RolesRepository rolesRepository;
     private final PasswordEncoder passwordEndocer;
     private final PilotosRepository pilotosRepository;
+    private final ParcialidadesRepository parcialidadesRepository;
     private AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
     private static final Logger logger = LoggerFactory.getLogger(UsuariosService.class);
 
-    public UsuariosService(UsuariosRepository usuariosRepository,PilotosRepository pilotosRepository, RolesRepository rolesRepository, PasswordEncoder passwordEndocer, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public UsuariosService(UsuariosRepository usuariosRepository,PilotosRepository pilotosRepository, RolesRepository rolesRepository,ParcialidadesRepository parcialidadesRepository, PasswordEncoder passwordEndocer, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.usuariosRepository = usuariosRepository;
         this.rolesRepository = rolesRepository;
         this.passwordEndocer = passwordEndocer;
         this.pilotosRepository = pilotosRepository;
         this.authenticationManager = authenticationManager;
+        this.parcialidadesRepository = parcialidadesRepository;
         this.jwtUtils = jwtUtils;
     }
     
     /*
         Metodo para obtener los datos de un usuario
     */
-    public Optional<BCUsuarios> getUsuario(GetUsuarioRequest login) {
-        String respuesta;
-        logger.info("El usuario es ", login);
-        Optional<BCUsuarios> user = usuariosRepository.findByUsername(login.getLogin());
+    //@Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public Optional<BCUsuarios> getUsuario(String login) {
+        logger.info("El usuario es "+ login);
+        Optional<BCUsuarios> user = usuariosRepository.findByUsername(login);
         return user;
     }
 
     /*
         Metodo para registrar un usuario
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> registrarUsuario(CrearUsuarioRequest usuario) throws BadRequestException {
         String respuesta;
         logger.info("El usuario es ", usuario);
@@ -143,6 +150,7 @@ public class UsuariosService {
         }
     }
     
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -165,11 +173,23 @@ public class UsuariosService {
     /*
         Metodo para obtener informacion de un transportista
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public Optional<BCPilotos> getPiloto(PilotoRequest transportistaRequest) {
         String respuesta;
         logger.info("El piloto a consultar es ", transportistaRequest);
         Optional<BCPilotos> transportista = pilotosRepository.findByLicenciaPiloto(transportistaRequest.getLicencia());
         return transportista;
+    }
+    
+    /*
+        Metodo para obtener informacion de un transportista
+    */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public Boolean getQRValido(SolicitudRequest solicitud) {
+        Boolean respuesta;
+        logger.info("La solicitud a consultar es ", solicitud.getSolicitud());
+        respuesta = parcialidadesRepository.getQRValido(solicitud.getSolicitud());
+        return respuesta;
     }
 
 }

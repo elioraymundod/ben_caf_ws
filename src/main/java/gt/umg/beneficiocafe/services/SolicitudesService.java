@@ -7,9 +7,9 @@ package gt.umg.beneficiocafe.services;
 import gt.umg.beneficiocafe.dto.FaltanteSobranteDto;
 import gt.umg.beneficiocafe.dto.SolicitudesDto;
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCParcialidades;
-import gt.umg.beneficiocafe.models.BCPesajesBascula;
-import gt.umg.beneficiocafe.models.BCSolicitudes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCParcialidades;
+import gt.umg.beneficiocafe.models.pesocabal.BCPesajesBascula;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
 import gt.umg.beneficiocafe.payload.request.CambiarEstadoSolicitudRequest;
 import gt.umg.beneficiocafe.payload.request.CrearSolicitudRequest;
 import gt.umg.beneficiocafe.payload.request.EstadoRequest;
@@ -18,9 +18,9 @@ import gt.umg.beneficiocafe.payload.request.ValidarSolicitudRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
 import gt.umg.beneficiocafe.projections.SolicitudValidaProjection;
 import gt.umg.beneficiocafe.projections.SolicitudesDetalleProjection;
-import gt.umg.beneficiocafe.repository.ParcialidadesRepository;
-import gt.umg.beneficiocafe.repository.PesoCabalRepository;
-import gt.umg.beneficiocafe.repository.SolicitudesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
+import gt.umg.beneficiocafe.repository.pesocabal.PesoCabalRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.SolicitudesRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -59,12 +60,13 @@ public class SolicitudesService {
     /*
         Metodo para crear una solicitud
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> registrarSolicitud(CrearSolicitudRequest solicitud) throws BadRequestException{
         String respuesta;
         logger.info("La solicitud a crear es " + solicitud);
         try{
             BCSolicitudes nuevaSolicitud = new BCSolicitudes(solicitud.getEstadoSolicitiud(), solicitud.getPlaca(), solicitud.getCantidadParcialidades(),
-                            solicitud.getPiloto(), solicitud.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), solicitud.getDescripcion());
+                            solicitud.getPiloto(), solicitud.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), solicitud.getTotalPesaje());
             solicitudesRepository.save(nuevaSolicitud);
             return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La solicitud se creo exitosamente", nuevaSolicitud));
         } catch(BadRequestException e) {
@@ -75,6 +77,7 @@ public class SolicitudesService {
     /*
         Metodo para obtener solicitudes en base a un usuario
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public List<SolicitudesDetalleProjection> getSolicitudesByUsuario(UsuarioRequest usuario) throws BadRequestException{
         
         logger.info("Se consulta solicitudes del usuario " + usuario.getUsuario());
@@ -91,6 +94,7 @@ public class SolicitudesService {
     /*
         Metodo para obtener solicitudes por estado
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public List<SolicitudesDetalleProjection> getSolicitudesByEstado(EstadoRequest estado) throws BadRequestException{
         
         logger.info("Se consulta solicitudes en estado " + estado.getEstado());
@@ -107,6 +111,7 @@ public class SolicitudesService {
     /*
         Metodo para validar si una solicitud es valida o no es valida para poder proceder
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> validarSolicitud(ValidarSolicitudRequest solicitud) throws BadRequestException{
        Boolean respuesta = false;
         logger.info("La solicitud a validar es " + solicitud.getSolicitud());
@@ -127,6 +132,7 @@ public class SolicitudesService {
     /*
         Metodo para cambiar el estado de una solicitud
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> cambiarEstadoSolicitud(CambiarEstadoSolicitudRequest solicitud) throws BadRequestException{
          String respuesta;
         logger.info("La solicitud a cambiarle el estado es " + solicitud.getSolicitud());
@@ -150,6 +156,7 @@ public class SolicitudesService {
     /*
         Metodo para validar Faltantes y Sobrantes
     */
+    @Transactional(transactionManager = "pesoCabalTransactionManager")
     public ResponseEntity<?> validarFaltantesSobrantes(ValidarSolicitudRequest solicitud) throws BadRequestException{
         this.pesosBascula= 0;
         this.pesosIndicados = 0;

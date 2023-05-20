@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,30 +30,24 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_parcialidades", schema = "umg_beneficio_cafe")
-public class BCParcialidades implements Serializable {
+@Table(name = "bc_anexos", schema = "umg_beneficio_cafe")
+public class BCAnexos implements Serializable{
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_parcialidad")
-    private UUID idParcialidad;
+    @Column(name = "id_anexo")
+    private UUID idAnexo;
     
     @Column(name = "solicitud")
     private UUID solicitud;
     
-    @Column(name = "peso_enviado")
-    private Double pesoEnviado;
+    @Column(name = "observaciones")
+    private String observaciones;
     
-    @Column(name = "placa")
-    private String placa;
+    @Column(name = "sobrante_faltante")
+    private String sobranteFaltante;
     
-    @Column(name = "piloto")
-    private String piloto;
-    
-    @Column(name = "atendido")
-    private Boolean atendido;
-    
-     @Column(name = "usuario_creacion")
+    @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
@@ -67,15 +61,14 @@ public class BCParcialidades implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCParcialidades(UUID solicitud, Double pesoEnviado, String placa, String piloto, Boolean atendido, UUID usuarioCreacion, Date fechaCreacion) {
+    public BCAnexos(UUID solicitud, String observaciones, String sobranteFaltante, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idAnexo = idAnexo;
         this.solicitud = solicitud;
-        this.pesoEnviado = pesoEnviado;
-        this.placa = placa;
-        this.piloto = piloto;
-        this.atendido = atendido;
+        this.observaciones = observaciones;
+        this.sobranteFaltante = sobranteFaltante;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
     }
-
- 
+    
+    
 }

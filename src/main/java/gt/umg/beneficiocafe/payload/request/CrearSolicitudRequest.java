@@ -36,10 +36,8 @@ public class CrearSolicitudRequest {
     @Size(min = 3, max = 15)
     private String piloto;
     
-    @NotBlank
     @NotNull
-    @Size(min = 5, max = 100)
-    private String descripcion;
+    private Integer totalPesaje;
     
     @NotNull
     private UUID usuarioCreacion;

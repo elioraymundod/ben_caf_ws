@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -50,10 +52,11 @@ public class BCUsuarios {
     @Column(name = "password_usuario")
     private String passwordUsuario;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "bc_usuarios_roles", schema = "umg_beneficio_cafe",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_rol"))
+    //@JsonIgnore
     private Set<BCRoles> roles = new HashSet<>();
 
     public BCUsuarios(String correoUsuario, String passwordUsuario, String username) {

@@ -5,12 +5,11 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCParcialidades;
-import gt.umg.beneficiocafe.models.BCPesajesBascula;
+import gt.umg.beneficiocafe.models.pesocabal.BCPesajesBascula;
 import gt.umg.beneficiocafe.payload.request.CrearPesoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.ParcialidadesRepository;
-import gt.umg.beneficiocafe.repository.PesoCabalRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
+import gt.umg.beneficiocafe.repository.pesocabal.PesoCabalRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -19,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -41,18 +41,22 @@ public class PesoCabalService {
     /*
         Metodo para registrar el peso de una parcialidad que ingresa a peso cabal
     */
+    @Transactional(transactionManager = "pesoCabalTransactionManager")
     public ResponseEntity<?> registrarPeso(CrearPesoRequest peso) throws BadRequestException{
         String respuesta;
         logger.info("El peso a registrar es " + peso);
         try{
-            BCParcialidades p = parcialidadesRepository.getParcialidadById(peso.getParcialidad());
+            /*BCParcialidades p = parcialidadesRepository.getParcialidadById(peso.getParcialidad());
             if (p == null) {
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.NOT_FOUND, "La parcialidad indicada no existe", false));
             }else  {
                 BCPesajesBascula nuevoPesaje = new BCPesajesBascula(peso.getParcialidad(), peso.getPeso(), peso.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
                 pesoCabalRepository.save(nuevoPesaje);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "El pesaje se registro exitosamente", nuevoPesaje));
-            }
+            }*/
+            BCPesajesBascula nuevoPesaje = new BCPesajesBascula(peso.getParcialidad(), peso.getPeso(), peso.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
+                pesoCabalRepository.save(nuevoPesaje);
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "El pesaje se registro exitosamente", nuevoPesaje));
 
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());

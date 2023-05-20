@@ -6,10 +6,10 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCPilotos;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCPilotos;
 import gt.umg.beneficiocafe.payload.request.CrearPilotoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.PilotosRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.PilotosRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -38,6 +39,7 @@ public class PilotosService {
     /*
         Metodo para crear un piloto
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> registrarPiloto(CrearPilotoRequest piloto) throws BadRequestException{
         String respuesta;
         logger.info("El piloto a crear es " + piloto);

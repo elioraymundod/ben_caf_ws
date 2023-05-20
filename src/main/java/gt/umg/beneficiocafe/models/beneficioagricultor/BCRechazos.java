@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -30,16 +31,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_estados", schema = "umg_beneficio_cafe")
-public class BCEstados implements Serializable {
+@Table(name = "bc_rechazos", schema = "umg_beneficio_cafe")
+public class BCRechazos implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_estado")
-    private UUID idEstado;
+    @Column(name = "id_rechazo")
+    private UUID idRechazo;
     
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "solicitud")
+    private UUID solicitud;
+    
+    @Column(name = "observaciones")
+    private String observaciones;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -55,12 +59,10 @@ public class BCEstados implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCEstados(UUID idEstado, String descripcion, UUID usuarioCreacion, Date fechaCreacion, UUID usuarioModificacion, Date fechaModificacion) {
-        this.idEstado = idEstado;
-        this.descripcion = descripcion;
+    public BCRechazos(UUID solicitud, String observaciones, UUID usuarioCreacion) {
+        this.solicitud = solicitud;
+        this.observaciones = observaciones;
         this.usuarioCreacion = usuarioCreacion;
-        this.fechaCreacion = fechaCreacion;
-        this.usuarioModificacion = usuarioModificacion;
-        this.fechaModificacion = fechaModificacion;
-    }
+        //this.fechaCreacion = fechaCreacion;
+    }    
 }

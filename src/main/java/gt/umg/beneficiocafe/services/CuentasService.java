@@ -5,11 +5,11 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCCuentas;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCCuentas;
 import gt.umg.beneficiocafe.payload.request.CambiarEstadoCuentaRequest;
 import gt.umg.beneficiocafe.payload.request.CrearCuentaRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.CuentasRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.CuentasRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -38,6 +39,7 @@ public class CuentasService {
     /*
         Metodo para crear una cuenta
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> crearCuenta(CrearCuentaRequest cuenta) throws BadRequestException{
         String respuesta;
         logger.info("La cuenta a crear es " + cuenta);
@@ -53,6 +55,7 @@ public class CuentasService {
     /*
         Metodo para cambiar el estado de una cuenta
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> cambiarEstadoCuenta(CambiarEstadoCuentaRequest cuenta) throws BadRequestException{
         String respuesta;
         logger.info("La cuenta a cambiarle el estado es " + cuenta.getIdCuenta());

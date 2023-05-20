@@ -16,7 +16,7 @@ public interface SolicitudesDetalleProjection {
     public String getNombrePiloto();
     public String getPlaca();
     public String getPiloto();
-    public String getDescripcion();
+    public String getTotalPesaje();
     public String getIdSolicitud();
     public Boolean getParcialidadesCompletas();
     public String getNoCuenta();

@@ -5,9 +5,9 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCCuentas;
-import gt.umg.beneficiocafe.models.BCParcialidades;
-import gt.umg.beneficiocafe.models.BCSolicitudes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCCuentas;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCParcialidades;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
 import gt.umg.beneficiocafe.payload.request.AtenderParcialidadRequest;
 import gt.umg.beneficiocafe.payload.request.AtendidoRequest;
 import gt.umg.beneficiocafe.payload.request.CrearParcialidadesRequest;
@@ -15,9 +15,10 @@ import gt.umg.beneficiocafe.payload.request.EstadoRequest;
 import gt.umg.beneficiocafe.payload.request.SolicitudRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
 import gt.umg.beneficiocafe.projections.CantidadParcialidadesProjection;
-import gt.umg.beneficiocafe.repository.CuentasRepository;
-import gt.umg.beneficiocafe.repository.ParcialidadesRepository;
-import gt.umg.beneficiocafe.repository.SolicitudesRepository;
+import gt.umg.beneficiocafe.projections.TotalPesajeEnviadoProjection;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.CuentasRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.SolicitudesRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -51,6 +53,7 @@ public class ParcialidadesService {
     /*
         Metodo para enviar una parcialidad
      */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> enviarParcialidad(CrearParcialidadesRequest parcialidad) throws BadRequestException {
         String respuesta;
         logger.info("La parcialidad a crear es " + parcialidad);
@@ -72,7 +75,7 @@ public class ParcialidadesService {
                     return ResponseEntity.ok(new SuccessResponse(HttpStatus.EXPECTATION_FAILED, "El piloto indicado no es el que fue aprobado al crear la solicitud", false));
                 }
 
-                BCParcialidades nuevaParcialidad = new BCParcialidades(parcialidad.getSolicitud(), parcialidad.getPesoEnviado(), parcialidad.getPlaca(), parcialidad.getPiloto(), false, parcialidad.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
+                BCParcialidades nuevaParcialidad = new BCParcialidades(parcialidad.getSolicitud(), parcialidad.getPesoEnviado(), parcialidad.getPlaca(), parcialidad.getPiloto(), false, parcialidad.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), false);
                 parcialidadesRepository.save(nuevaParcialidad);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La parcialidad se creo exitosamente", nuevaParcialidad));
             }
@@ -84,6 +87,7 @@ public class ParcialidadesService {
     /*
         Metodo para obtener las parcialidades
      */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> getCantidadParcialidades(SolicitudRequest solicitudRequest) throws BadRequestException {
 
         try {
@@ -94,7 +98,7 @@ public class ParcialidadesService {
             } else {
                 CantidadParcialidadesProjection c = parcialidadesRepository.getCantidadParcialidades(solicitudRequest.getSolicitud());
                 if (solicitud.getCantidadParcialidades() <= c.getCantidadParcialidades()) {
-                    return ResponseEntity.ok(new SuccessResponse(HttpStatus.EXPECTATION_FAILED, String.valueOf(cuenta.getIdCuenta()), false));
+                    return ResponseEntity.ok(new SuccessResponse(HttpStatus.EXPECTATION_FAILED, String.valueOf(c.getCantidadParcialidades()), false));
                 } else {
                     return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, String.valueOf(c.getCantidadParcialidades()), true));
                 }
@@ -108,6 +112,7 @@ public class ParcialidadesService {
     /*
         Metodo para obtener parcialidades a ingresar al beneficio del cafe
      */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public List<BCParcialidades> getParcialidadesPendientes(AtendidoRequest estado) throws BadRequestException {
 
         try {
@@ -123,6 +128,7 @@ public class ParcialidadesService {
     /*
         Metodo para marcar como atendida una parcialidad
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> atenderParcialidad(AtenderParcialidadRequest estado) throws BadRequestException{
          String respuesta;
         try{
@@ -133,6 +139,48 @@ public class ParcialidadesService {
             } else {
                 parcialidad.setAtendido(estado.getNuevoEstado());
                 parcialidad.setUsuarioModificacion(estado.getUsuarioModificacion());
+                parcialidad.setFechaModificacion(ManejoFechas.setTimeZoneDateGT(new Date()));
+                parcialidadesRepository.save(parcialidad);
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se actualizo la parcialidad correctamente", parcialidad));
+            }
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener el total de pesajes enviados por solicitud
+     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public ResponseEntity<?> getTotalpesajesEnviadosBySolicitud(SolicitudRequest solicitudRequest) throws BadRequestException {
+
+        try {
+            BCSolicitudes solicitud = solicitudesRepository.getSolicitudById(solicitudRequest.getSolicitud());
+            if (solicitud == null) {
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.NOT_FOUND, "La solicitud indicada no existe", solicitudRequest.getSolicitud()));
+            } else {
+                TotalPesajeEnviadoProjection c = parcialidadesRepository.getTotalPesajeEnviados(solicitudRequest.getSolicitud());
+                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, String.valueOf(c.getTotalPesaje()), true));
+            }
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    
+    /*
+        Metodo para marcar como escaneada una parcialidad
+    */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public ResponseEntity<?> escanearQR(SolicitudRequest solicitud) throws BadRequestException{
+         String respuesta;
+        try{
+            BCParcialidades parcialidad = null;
+            parcialidad = parcialidadesRepository.getUltimaParcialidad(solicitud.getSolicitud());
+            if (parcialidad == null) {
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.NOT_FOUND, "No se encontro la parcialidad indicada", null));
+            } else {
+                parcialidad.setQrabierto(true);
                 parcialidad.setFechaModificacion(ManejoFechas.setTimeZoneDateGT(new Date()));
                 parcialidadesRepository.save(parcialidad);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se actualizo la parcialidad correctamente", parcialidad));

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.pesocabal;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,19 +30,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_impresiones_bascula", schema = "umg_beneficio_cafe")
-public class BCImpresionesBascula implements Serializable {
+@Table(name = "bc_pesajes_bascula", schema = "umg_peso_cabal")
+public class BCPesajesBascula implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_impresion")
-    private UUID idImpresion;
+    @Column(name = "id_pesaje")
+    private UUID idPesaje;
     
-    @Column(name = "pesaje")
-    private UUID pesaje;
+    @Column(name = "parcialidad")
+    private UUID parcialidad;
     
-    @Column(name = "usuario_imprimio")
-    private UUID usuarioImprimio;
+    @Column(name = "peso")
+    private Double peso;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -58,10 +58,10 @@ public class BCImpresionesBascula implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCImpresionesBascula(UUID pesaje, UUID usuarioImprimio, UUID usuarioCreacion, Date fechaCreacion) {
-        //this.idImpresion = idImpresion;
-        this.pesaje = pesaje;
-        this.usuarioImprimio = usuarioImprimio;
+    public BCPesajesBascula(UUID parcialidad, Double peso, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idPesaje = idPesaje;
+        this.parcialidad = parcialidad;
+        this.peso = peso;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
     }

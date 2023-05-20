@@ -5,12 +5,12 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCAnexos;
-import gt.umg.beneficiocafe.models.BCSolicitudes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCAnexos;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
 import gt.umg.beneficiocafe.payload.request.CrearAnexoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.AnexosRepository;
-import gt.umg.beneficiocafe.repository.SolicitudesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.AnexosRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.SolicitudesRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -40,6 +41,7 @@ public class AnexosService {
     /*
         Metodo para crear anexos
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> crearAnexo(CrearAnexoRequest a) throws BadRequestException{
         String respuesta;
         logger.info("El anexo a registrar es " + a);

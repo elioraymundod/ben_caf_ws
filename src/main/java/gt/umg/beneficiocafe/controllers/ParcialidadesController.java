@@ -4,7 +4,7 @@
  */
 package gt.umg.beneficiocafe.controllers;
 
-import gt.umg.beneficiocafe.models.BCParcialidades;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCParcialidades;
 import gt.umg.beneficiocafe.payload.request.AtenderParcialidadRequest;
 import gt.umg.beneficiocafe.payload.request.AtendidoRequest;
 import gt.umg.beneficiocafe.payload.request.CambiarEstadoSolicitudRequest;
@@ -48,6 +48,12 @@ public class ParcialidadesController {
     @PreAuthorize("hasRole('ROLE_UMG_BC_AGRICULTOR') || hasRole('ROLE_UMG_BC_PESO_CABAL') ")
     public ResponseEntity<?> obtenerCantidadParcialidades(@Valid @RequestBody SolicitudRequest solicitud) {
         return parcialidadesService.getCantidadParcialidades(solicitud);
+    }
+    
+    @PostMapping("/totalPesaje")
+    @PreAuthorize("hasRole('ROLE_UMG_BC_AGRICULTOR')")
+    public ResponseEntity<?> obtenerTotalPesajeEnviado(@Valid @RequestBody SolicitudRequest solicitud) {
+        return parcialidadesService.getTotalpesajesEnviadosBySolicitud(solicitud);
     }
     
     @PostMapping("/revision")

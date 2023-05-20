@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,22 +30,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_anexos", schema = "umg_beneficio_cafe")
-public class BCAnexos implements Serializable{
+@Table(name = "bc_impresiones_bascula", schema = "umg_beneficio_cafe")
+public class BCImpresionesBascula implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_anexo")
-    private UUID idAnexo;
+    @Column(name = "id_impresion")
+    private UUID idImpresion;
     
-    @Column(name = "solicitud")
-    private UUID solicitud;
+    @Column(name = "pesaje")
+    private UUID pesaje;
     
-    @Column(name = "observaciones")
-    private String observaciones;
-    
-    @Column(name = "sobrante_faltante")
-    private String sobranteFaltante;
+    @Column(name = "usuario_imprimio")
+    private UUID usuarioImprimio;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -61,11 +58,10 @@ public class BCAnexos implements Serializable{
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCAnexos(UUID solicitud, String observaciones, String sobranteFaltante, UUID usuarioCreacion, Date fechaCreacion) {
-        //this.idAnexo = idAnexo;
-        this.solicitud = solicitud;
-        this.observaciones = observaciones;
-        this.sobranteFaltante = sobranteFaltante;
+    public BCImpresionesBascula(UUID pesaje, UUID usuarioImprimio, UUID usuarioCreacion, Date fechaCreacion) {
+        //this.idImpresion = idImpresion;
+        this.pesaje = pesaje;
+        this.usuarioImprimio = usuarioImprimio;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
     }

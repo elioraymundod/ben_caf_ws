@@ -5,7 +5,7 @@
 package gt.umg.beneficiocafe.controllers;
 
 import gt.umg.beneficiocafe.dto.SolicitudesDto;
-import gt.umg.beneficiocafe.models.BCSolicitudes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
 import gt.umg.beneficiocafe.payload.request.CambiarEstadoSolicitudRequest;
 import gt.umg.beneficiocafe.payload.request.CrearSolicitudRequest;
 import gt.umg.beneficiocafe.payload.request.EstadoRequest;

@@ -1,9 +1,11 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,34 +24,39 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author Elio Raymundo
  */
+
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_solicitudes", schema = "umg_beneficio_cafe")
-public class BCSolicitudes {
+@Table(name = "bc_parcialidades", schema = "umg_beneficio_cafe")
+public class BCParcialidades implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_solicitud", columnDefinition = "UUID")
-    private UUID idSolicitud;
+    @Column(name = "id_parcialidad")
+    private UUID idParcialidad;
     
-    @Column(name = "estado_solicitud")
-    private UUID estadoSolicitud;
+    @Column(name = "solicitud")
+    private UUID solicitud;
+    
+    @Column(name = "peso_enviado")
+    private Double pesoEnviado;
     
     @Column(name = "placa")
     private String placa;
     
-    @Column(name = "cantidad_parcialidades")
-    private Integer cantidadParcialidades;
-    
     @Column(name = "piloto")
     private String piloto;
     
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "atendido")
+    private Boolean atendido;
     
-    @Column(name = "usuario_creacion")
+    @Column(name = "qrabierto")
+    private Boolean qrabierto;
+    
+     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
     
     @Column(name = "fecha_creacion")
@@ -62,19 +70,16 @@ public class BCSolicitudes {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCSolicitudes(UUID estadoSolicitud, String placa, Integer cantidadParcialidades, String piloto, UUID usuarioCreacion, Date fechaCreacion,String descripcion) {
-        this.estadoSolicitud = estadoSolicitud;
-        this.descripcion = descripcion;
+    public BCParcialidades(UUID solicitud, Double pesoEnviado, String placa, String piloto, Boolean atendido, UUID usuarioCreacion, Date fechaCreacion, Boolean qrabierto) {
+        this.solicitud = solicitud;
+        this.pesoEnviado = pesoEnviado;
         this.placa = placa;
-        this.cantidadParcialidades = cantidadParcialidades;
         this.piloto = piloto;
+        this.atendido = atendido;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
+        this.qrabierto = qrabierto;
     }
 
-    public BCSolicitudes() {
-    }
-    
-    
-    
+ 
 }

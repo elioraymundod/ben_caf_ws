@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,23 +30,22 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_pilotos", schema = "umg_beneficio_cafe")
-public class BCPilotos implements Serializable {
+@Table(name = "bc_cuentas", schema = "umg_beneficio_cafe")
+public class BCCuentas implements Serializable {
     @Id
-    @Column(name = "licencia_piloto")
-    private String licenciaPiloto;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id_cuenta")
+    private UUID idCuenta;
     
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "no_cuenta")
+    private String noCuenta;
     
-    @Column(name = "celular")
-    private String celular;
+    @Column(name = "estado")
+    private UUID estado;
     
-    @Column(name = "correo")
-    private String correo;
-    
-    @Column(name = "permitido_en_beneficio")
-    private Boolean permitidoEnBeneficio;
+    @Column(name = "solicitud")
+    private UUID solicitud;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -62,14 +61,13 @@ public class BCPilotos implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCPilotos(String licenciaPiloto, String nombre, String celular, String correo, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
-        this.licenciaPiloto = licenciaPiloto;
-        this.nombre = nombre;
-        this.celular = celular;
-        this.correo = correo;
+    public BCCuentas(String noCuenta, UUID estado, UUID solicitud, UUID usuarioCreacion, Date fechaCreacion) {
+        this.noCuenta = noCuenta;
+        this.estado = estado;
+        this.solicitud = solicitud;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
-        this.permitidoEnBeneficio = permitidoEnBeneficio;
     }
+    
     
 }

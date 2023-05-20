@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,22 +30,20 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_cuentas", schema = "umg_beneficio_cafe")
-public class BCCuentas implements Serializable {
+@Table(name = "bc_transportes", schema = "umg_beneficio_cafe")
+public class BCTransportes implements Serializable {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id_cuenta")
-    private UUID idCuenta;
+    @Column(name = "placa_transporte")
+    private String placaTransporte;
     
-    @Column(name = "no_cuenta")
-    private String noCuenta;
+    @Column(name = "marca")
+    private String marca;
     
-    @Column(name = "estado")
-    private UUID estado;
+    @Column(name = "color")
+    private String color;
     
-    @Column(name = "solicitud")
-    private UUID solicitud;
+    @Column(name = "permitido_en_beneficio")
+    private Boolean permitidoEnBeneficio;
     
     @Column(name = "usuario_creacion")
     private UUID usuarioCreacion;
@@ -61,13 +59,15 @@ public class BCCuentas implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCCuentas(String noCuenta, UUID estado, UUID solicitud, UUID usuarioCreacion, Date fechaCreacion) {
-        this.noCuenta = noCuenta;
-        this.estado = estado;
-        this.solicitud = solicitud;
+    public BCTransportes(String placaTransporte, String marca, String color, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
+        this.placaTransporte = placaTransporte;
+        this.marca = marca;
+        this.color = color;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
+        this.permitidoEnBeneficio = permitidoEnBeneficio;
     }
+    
     
     
 }

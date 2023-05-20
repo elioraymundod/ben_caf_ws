@@ -1,7 +1,7 @@
 package gt.umg.beneficiocafe.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import gt.umg.beneficiocafe.models.BCUsuarios;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCUsuarios;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

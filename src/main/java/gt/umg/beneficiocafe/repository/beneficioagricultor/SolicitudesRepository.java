@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package gt.umg.beneficiocafe.repository;
+package gt.umg.beneficiocafe.repository.beneficioagricultor;
 
 import gt.umg.beneficiocafe.dto.SolicitudesDto;
-import gt.umg.beneficiocafe.models.BCSolicitudes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
 import gt.umg.beneficiocafe.projections.SolicitudValidaProjection;
 import gt.umg.beneficiocafe.projections.SolicitudesDetalleProjection;
 import java.util.List;
@@ -15,11 +15,13 @@ import org.hibernate.dialect.PostgreSQL10Dialect;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Elio Raymundo
  */
+@Repository
 public interface SolicitudesRepository extends JpaRepository<BCSolicitudes, UUID> {
 
     @Query(value = "select \n"
@@ -36,7 +38,7 @@ public interface SolicitudesRepository extends JpaRepository<BCSolicitudes, UUID
             + "	bp.nombre as nombrePiloto,\n"
             + "	bs.placa as placa,\n"
             + "	bs.piloto,\n"
-            + "	bs.descripcion,\n"
+            + "	bs.total_pesaje as totalPesaje,\n"
             + "    cast(id_solicitud as text) as idSolicitud,\n"
             + "	cast((select bc.id_cuenta from umg_beneficio_cafe.bc_cuentas bc where bc.solicitud = bs.id_solicitud limit 1) as text) as idCuenta,\n"
             + "    (select bc.no_cuenta from umg_beneficio_cafe.bc_cuentas bc where bc.solicitud = bs.id_solicitud limit 1 ) as noCuenta,\n"
@@ -63,7 +65,7 @@ public interface SolicitudesRepository extends JpaRepository<BCSolicitudes, UUID
             + "	bp.nombre as nombrePiloto,\n"
             + "	bs.placa as placa,\n"
             + "	bs.piloto,\n"
-            + "	bs.descripcion,\n"
+            + "	bs.total_pesaje as totalPesaje,\n"
             + "    cast(id_solicitud as text) as idSolicitud,\n"
             + "	cast((select bc.id_cuenta from umg_beneficio_cafe.bc_cuentas bc where bc.solicitud = bs.id_solicitud limit 1) as text) as idCuenta,\n"
             + "    (select bc.no_cuenta from umg_beneficio_cafe.bc_cuentas bc where bc.solicitud = bs.id_solicitud limit 1 ) as noCuenta,\n"

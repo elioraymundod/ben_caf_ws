@@ -6,10 +6,10 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCTransportes;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCTransportes;
 import gt.umg.beneficiocafe.payload.request.CrearTransporteRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.TransportesRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.TransportesRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -39,6 +40,7 @@ public class TransportesService {
     /*
         Metodo para crear un transporte
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> registrarTransporte(CrearTransporteRequest transporte) throws BadRequestException{
         String respuesta;
         logger.info("El transporte a crear es " + transporte);

@@ -1,9 +1,9 @@
 package gt.umg.beneficiocafe.security.services;
 
-import gt.umg.beneficiocafe.models.BCUsuarios;
-import gt.umg.beneficiocafe.repository.UsuariosRepository;
-import gt.umg.beneficiocafe.models.BCUsuarios;
-import gt.umg.beneficiocafe.repository.UsuariosRepository;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCUsuarios;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.UsuariosRepository;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCUsuarios;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

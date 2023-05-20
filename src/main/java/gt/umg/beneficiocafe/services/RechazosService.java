@@ -5,10 +5,10 @@
 package gt.umg.beneficiocafe.services;
 
 import gt.umg.beneficiocafe.exceptions.BadRequestException;
-import gt.umg.beneficiocafe.models.BCRechazos;
+import gt.umg.beneficiocafe.models.beneficioagricultor.BCRechazos;
 import gt.umg.beneficiocafe.payload.request.CrearRechazoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
-import gt.umg.beneficiocafe.repository.RechazosRepository;
+import gt.umg.beneficiocafe.repository.beneficioagricultor.RechazosRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
 import java.util.Date;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,6 +38,7 @@ public class RechazosService {
     /*
         Metodo para crear un rechazo
     */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
     public ResponseEntity<?> crearRechazo(CrearRechazoRequest rechazo) throws BadRequestException{
         String respuesta;
         logger.info("El rechazo a crear es " + rechazo);

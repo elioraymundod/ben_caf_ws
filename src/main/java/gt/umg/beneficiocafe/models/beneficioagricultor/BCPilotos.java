@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gt.umg.beneficiocafe.models;
+package gt.umg.beneficiocafe.models.beneficioagricultor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,17 +30,20 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @Entity
-@Table(name = "bc_transportes", schema = "umg_beneficio_cafe")
-public class BCTransportes implements Serializable {
+@Table(name = "bc_pilotos", schema = "umg_beneficio_cafe")
+public class BCPilotos implements Serializable {
     @Id
-    @Column(name = "placa_transporte")
-    private String placaTransporte;
+    @Column(name = "licencia_piloto")
+    private String licenciaPiloto;
     
-    @Column(name = "marca")
-    private String marca;
+    @Column(name = "nombre")
+    private String nombre;
     
-    @Column(name = "color")
-    private String color;
+    @Column(name = "celular")
+    private String celular;
+    
+    @Column(name = "correo")
+    private String correo;
     
     @Column(name = "permitido_en_beneficio")
     private Boolean permitidoEnBeneficio;
@@ -59,15 +62,14 @@ public class BCTransportes implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public BCTransportes(String placaTransporte, String marca, String color, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
-        this.placaTransporte = placaTransporte;
-        this.marca = marca;
-        this.color = color;
+    public BCPilotos(String licenciaPiloto, String nombre, String celular, String correo, UUID usuarioCreacion, Date fechaCreacion, Boolean permitidoEnBeneficio) {
+        this.licenciaPiloto = licenciaPiloto;
+        this.nombre = nombre;
+        this.celular = celular;
+        this.correo = correo;
         this.usuarioCreacion = usuarioCreacion;
         this.fechaCreacion = fechaCreacion;
         this.permitidoEnBeneficio = permitidoEnBeneficio;
     }
-    
-    
     
 }
