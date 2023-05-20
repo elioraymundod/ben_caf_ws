@@ -96,4 +96,10 @@ public interface SolicitudesRepository extends JpaRepository<BCSolicitudes, UUID
     public BCSolicitudes getSolicitudById(@Param("solicitud") UUID solicitud);
 
     Optional<BCSolicitudes> findByIdSolicitud(String solicitud);
+
+    @Query(value = "select * \n"
+            + "from umg_beneficio_cafe.bc_solicitudes bs where piloto = :piloto and estado_solicitud <> 'c5e2a590-eb00-11ed-a05b-0242ac120003';",
+            nativeQuery = true
+    )
+    public List<BCSolicitudes> consultarPilotoAsignado(@Param("piloto") String piloto);
 }

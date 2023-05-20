@@ -65,10 +65,22 @@ public class SolicitudesService {
         String respuesta;
         logger.info("La solicitud a crear es " + solicitud);
         try{
+            //Validar que el piloto no este asignado a otra cuenta
+            List<BCSolicitudes> pilotoConsulta = new ArrayList<>();
+            pilotoConsulta = solicitudesRepository.consultarPilotoAsignado(solicitud.getPiloto());
+            System.out.println(pilotoConsulta.toString()); 
+            System.out.println("permitido es " + pilotoConsulta.isEmpty());
+            if (pilotoConsulta.isEmpty()) {
             BCSolicitudes nuevaSolicitud = new BCSolicitudes(solicitud.getEstadoSolicitiud(), solicitud.getPlaca(), solicitud.getCantidadParcialidades(),
                             solicitud.getPiloto(), solicitud.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), solicitud.getTotalPesaje());
             solicitudesRepository.save(nuevaSolicitud);
-            return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La solicitud se creo exitosamente", nuevaSolicitud));
+            return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "La solicitud se creo exitosamente", nuevaSolicitud));     
+            }  else {
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.CONFLICT, "El piloto esta asignado a una cuenta", null));
+            }
+                
+            
+           
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());
         }
