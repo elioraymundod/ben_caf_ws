@@ -16,6 +16,8 @@ import gt.umg.beneficiocafe.payload.request.EstadoRequest;
 import gt.umg.beneficiocafe.payload.request.UsuarioRequest;
 import gt.umg.beneficiocafe.payload.request.ValidarSolicitudRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
+import gt.umg.beneficiocafe.projections.BestClientsProjection;
+import gt.umg.beneficiocafe.projections.ClientsWitthSobrantesFaltantes;
 import gt.umg.beneficiocafe.projections.SolicitudValidaProjection;
 import gt.umg.beneficiocafe.projections.SolicitudesDetalleProjection;
 import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
@@ -205,6 +207,34 @@ public class SolicitudesService {
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "cantidad invalida", false));
             }
             
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener el reporte de los tres mejores clientes
+    */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public ResponseEntity<?> getBestClients() throws BadRequestException{
+       List<BestClientsProjection> respuesta = new ArrayList<>();
+        try{
+            respuesta = solicitudesRepository.getBestClients();
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se meustra la lista de los mejores clientes", respuesta));
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener los clientes con sofrantes y faltantes
+    */
+    @Transactional(transactionManager = "beneficioagricultorTransactionManager")
+    public ResponseEntity<?> getClientsWithSobrantesFaltantes() throws BadRequestException{
+       List<ClientsWitthSobrantesFaltantes> respuesta = new ArrayList<>();
+        try{
+            respuesta = solicitudesRepository.getClientsWithSobrantesFaltantes();
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se meustra la lista de los clientes con faltantes", respuesta));
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());
         }

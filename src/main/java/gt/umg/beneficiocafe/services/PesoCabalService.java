@@ -8,10 +8,13 @@ import gt.umg.beneficiocafe.exceptions.BadRequestException;
 import gt.umg.beneficiocafe.models.pesocabal.BCPesajesBascula;
 import gt.umg.beneficiocafe.payload.request.CrearPesoRequest;
 import gt.umg.beneficiocafe.payload.response.SuccessResponse;
+import gt.umg.beneficiocafe.projections.TotalPesajeProjection;
 import gt.umg.beneficiocafe.repository.beneficioagricultor.ParcialidadesRepository;
 import gt.umg.beneficiocafe.repository.pesocabal.PesoCabalRepository;
 import gt.umg.beneficiocafe.security.jwt.JwtUtils;
 import gt.umg.beneficiocafe.util.ManejoFechas;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +60,40 @@ public class PesoCabalService {
             BCPesajesBascula nuevoPesaje = new BCPesajesBascula(peso.getParcialidad(), peso.getPeso(), peso.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
                 pesoCabalRepository.save(nuevoPesaje);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "El pesaje se registro exitosamente", nuevoPesaje));
+
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    /*
+        Metodo para obtener la cantidad de pesajes por dia
+    */
+    @Transactional(transactionManager = "pesoCabalTransactionManager")
+    public ResponseEntity<?> getTotalPesajeByFecha(String pFecha) throws BadRequestException{
+        try{
+            Integer pesajesByFecha = pesoCabalRepository.getTotalPesajeByFecha(pFecha);
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se obtienen los pesajes por fecha", pesajesByFecha));
+
+        } catch(BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    
+    /*
+        Metodo para obtener la cantidad de pesajes por rango de fechas
+    */
+    @Transactional(transactionManager = "pesoCabalTransactionManager")
+    public ResponseEntity<?> getTotalPesajeByRangoFechas(String pFechaInicio, String pFechaFin) throws BadRequestException, ParseException{
+        try{            
+            Date fechaI = ManejoFechas.stringToDate(pFechaInicio, "dd-MM-yyyy");
+            Date fechaF = ManejoFechas.stringToDate(pFechaFin, "dd-MM-yyyy");
+            logger.info("busqueda con fechas " + fechaI + " " + fechaF);
+            Integer pesajesByFecha = 0; //new TotalPesajeProjection(); 
+            pesajesByFecha = pesoCabalRepository.getTotalPesajesByRangoFechas(fechaI, fechaF);
+            //logger.info("Resultado es " + pesajesByFecha.getTotalPesaje());
+                return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Se obtienen los pesajes por rango de fechas", pesajesByFecha));
 
         } catch(BadRequestException e) {
             throw new BadRequestException(e.getMessage());

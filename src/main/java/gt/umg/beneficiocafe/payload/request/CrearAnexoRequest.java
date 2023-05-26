@@ -35,4 +35,7 @@ public class CrearAnexoRequest {
     
     @NotNull
     private UUID usuarioCreacion;
+    
+    @NotNull
+    private Integer peso;
 }

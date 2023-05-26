@@ -50,7 +50,7 @@ public class AnexosService {
             if (p == null) {
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.NOT_FOUND, "La solicitud indicada no existe", false));
             }else  {
-                BCAnexos nuevoAnexo = new BCAnexos(a.getSolicitud(), a.getObservaciones(), a.getSobranteFaltante(), a.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()));
+                BCAnexos nuevoAnexo = new BCAnexos(a.getSolicitud(), a.getObservaciones(), a.getSobranteFaltante(), a.getUsuarioCreacion(), ManejoFechas.setTimeZoneDateGT(new Date()), a.getPeso());
                 anexosRepository.save(nuevoAnexo);
                 return ResponseEntity.ok(new SuccessResponse(HttpStatus.OK, "Anexo creado exitosamente", nuevoAnexo));
             }

@@ -6,6 +6,8 @@ package gt.umg.beneficiocafe.repository.beneficioagricultor;
 
 import gt.umg.beneficiocafe.dto.SolicitudesDto;
 import gt.umg.beneficiocafe.models.beneficioagricultor.BCSolicitudes;
+import gt.umg.beneficiocafe.projections.BestClientsProjection;
+import gt.umg.beneficiocafe.projections.ClientsWitthSobrantesFaltantes;
 import gt.umg.beneficiocafe.projections.SolicitudValidaProjection;
 import gt.umg.beneficiocafe.projections.SolicitudesDetalleProjection;
 import java.util.List;
@@ -102,4 +104,32 @@ public interface SolicitudesRepository extends JpaRepository<BCSolicitudes, UUID
             nativeQuery = true
     )
     public List<BCSolicitudes> consultarPilotoAsignado(@Param("piloto") String piloto);
+
+    @Query(value = "select sum(bs.total_pesaje) as totalPesaje, bu.username ,\n"
+            + "count(bs.total_pesaje) as totalSolicitudes\n"
+            + "from umg_beneficio_cafe.bc_solicitudes bs \n"
+            + "\n"
+            + "inner join umg_beneficio_cafe.bc_usuarios bu on bu.id_usuario = bs.usuario_creacion \n"
+            + "\n"
+            + "group by bu.username order by totalPesaje desc\n"
+            + "\n"
+            + "limit 1",
+            nativeQuery = true
+    )
+    public List<BestClientsProjection> getBestClients();
+
+    @Query(value = "select \n"
+            + "ba.observaciones , ba.sobrante_faltante sobranteFaltante, ba.peso, bc.no_cuenta cuenta,\n"
+            + "(select bu2.username\n"
+            + "from umg_beneficio_cafe.bc_usuarios bu2 where bu2.id_usuario = bu.id_usuario) as agricultor\n"
+            + "from umg_beneficio_cafe.bc_anexos ba \n"
+            + "inner join umg_beneficio_cafe.bc_solicitudes bs on bs.id_solicitud = ba.solicitud \n"
+            + "inner join umg_beneficio_cafe.bc_usuarios bu on bu.id_usuario = \n"
+            + "(select bs2.usuario_creacion \n"
+            + "from umg_beneficio_cafe.bc_solicitudes bs2 where bs2.id_solicitud = bs.id_solicitud)\n"
+            + "inner join umg_beneficio_cafe.bc_cuentas bc on bc.solicitud = ba.solicitud ",
+            nativeQuery = true
+    )
+    public List<ClientsWitthSobrantesFaltantes> getClientsWithSobrantesFaltantes();
+
 }

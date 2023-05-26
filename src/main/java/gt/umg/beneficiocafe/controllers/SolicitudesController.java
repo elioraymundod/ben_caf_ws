@@ -84,4 +84,16 @@ public class SolicitudesController {
         return solicitudesService.validarFaltantesSobrantes(solicitud);
     }
     
+    @PostMapping("/best/clients")
+    @PreAuthorize("hasRole('ROLE_UMG_BC_BENEFICIO')")
+    public ResponseEntity<?> getBestClients() { //@Valid @RequestBody ValidarSolicitudRequest solicitud
+        return solicitudesService.getBestClients();
+    }
+    
+    @PostMapping("/clients/faltantes/sobrantes")
+    @PreAuthorize("hasRole('ROLE_UMG_BC_BENEFICIO')")
+    public ResponseEntity<?> getClientsWithFaltantesSobrantes() { //@Valid @RequestBody ValidarSolicitudRequest solicitud
+        return solicitudesService.getClientsWithSobrantesFaltantes();
+    }
+    
 }
